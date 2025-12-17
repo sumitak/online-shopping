@@ -12,6 +12,10 @@ import org.springframework.context.annotation.Import;
 import org.testcontainers.mongodb.MongoDBContainer;
 import org.hamcrest.Matchers;
 
+/**
+ * TestcontainersConfiguration is imported to provide the MongoDBContainer for testing.
+ * This class contains integration tests for the Product Service application.
+ */
 @Import(TestcontainersConfiguration.class)
 // it will start the application context with a random port and include the Testcontainers configuration for MongoDB
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = ProductServiceApplication.class)
