@@ -1,18 +1,32 @@
 package com.techno.practice.order;
 
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import com.github.tomakehurst.wiremock.junit5.WireMockTest;
+import com.techno.practice.order.stubs.InventoryClientStub;
 import io.restassured.RestAssured;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.mysql.MySQLContainer;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@WireMockTest(httpPort = 8082)
+
 class OrderServiceApplicationTests {
+
+    static WireMockServer wireMockServer;
 
     @ServiceConnection
     static MySQLContainer mysqlContainer = new MySQLContainer("mysql:8.0.33");
@@ -30,7 +44,7 @@ class OrderServiceApplicationTests {
         RestAssured.baseURI = "http://localhost";
     }
 
-	@Test
+    @Test
 	void shouldCreateOrder() {
         String orderRequest = """
                 {
@@ -39,7 +53,7 @@ class OrderServiceApplicationTests {
                      "quantity": 3
                    }
                 """;
-
+      InventoryClientStub.stubInventoryCall("SKU-ABC-124", 3);
       var responseBodyString =  RestAssured.given()
                 .header("Content-Type", "application/json")
                 .body(orderRequest)
