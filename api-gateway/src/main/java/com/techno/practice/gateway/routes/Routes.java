@@ -6,10 +6,7 @@ import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.cloud.gateway.server.mvc.handler.HandlerFunctions;*/
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-/*import org.springframework.web.servlet.function.RequestPredicates;
-import org.springframework.web.servlet.function.RouterFunction;
-import org.springframework.web.servlet.function.ServerResponse;*/
-import java.util.concurrent.TimeUnit;
+
 
 @Configuration
 public class Routes {
