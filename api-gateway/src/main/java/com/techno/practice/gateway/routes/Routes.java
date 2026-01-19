@@ -35,6 +35,19 @@ public class Routes {
     }
 
     @Bean
+    public RouteLocator productServiceSwaggerRoute(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route("product-service-swagger", r -> r
+                        .path("/aggregate/product-service/v3/api-docs")
+                        .filters(f -> f.rewritePath(
+                                "/aggregate/product-service/(?<segment>.*)",
+                                "/${segment}"
+                        ))
+                        .uri("http://localhost:8080"))
+                .build();
+    }
+
+    @Bean
     public RouteLocator orderServiceRoute(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route(p -> p
@@ -44,11 +57,37 @@ public class Routes {
     }
 
     @Bean
+    public RouteLocator orderServiceSwaggerRoute(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route("order-service-swagger", r -> r
+                        .path("/aggregate/order-service/v3/api-docs")
+                        .filters(f -> f.rewritePath(
+                                "/aggregate/order-service/(?<segment>.*)",
+                                "/${segment}"
+                        ))
+                        .uri("http://localhost:8081"))
+                .build();
+    }
+
+    @Bean
     public RouteLocator inventoryServiceRoute(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route(p -> p
                         .path("/api/inventory/isInStock") // Matches requests to /get
                         .uri("http://localhost:8082")) // Routes to this URI
+                .build();
+    }
+
+    @Bean
+    public RouteLocator inventoryServiceSwaggerRoute(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route("inventory-service-swagger", r -> r
+                        .path("/aggregate/inventory-service/v3/api-docs")
+                        .filters(f -> f.rewritePath(
+                                "/aggregate/inventory-service/(?<segment>.*)",
+                                "/${segment}"
+                        ))
+                        .uri("http://localhost:8082"))
                 .build();
     }
 

@@ -20,6 +20,15 @@ public class SecurityConfig  {
                         .pathMatchers("/actuator/**").permitAll()
                         .pathMatchers("/admin/**").hasRole("ADMIN")
                         .pathMatchers("/users/**").hasAnyRole("USER", "ADMIN")
+                        .pathMatchers(
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/swagger-resources/**",
+                               "/api-docs/**",
+                                "/aggregate/**"
+
+                        ).permitAll()
                         .anyExchange().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 ->
