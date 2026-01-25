@@ -45,10 +45,28 @@ public class Routes {
     }
 
     @Bean
+    public RouterFunction<ServerResponse> orderServiceSwaggerRoute() {
+        return GatewayRouterFunctions.route("order-service-swagger-ui")
+                .route(RequestPredicates.path("/aggregate/order-service/v3/api-docs"),
+                        HandlerFunctions.http("http://localhost:8081"))
+                .filter(setPath("/v3/api-docs"))
+                .build();
+    }
+
+    @Bean
     public RouterFunction<ServerResponse> inventoryServiceRoute() {
         return GatewayRouterFunctions.route("inventory-service")
                 .route(RequestPredicates.path("/api/inventory/isInStock"),
                         HandlerFunctions.http("http://localhost:8082"))
+                .build();
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> inventoryServiceSwaggerRoute() {
+        return GatewayRouterFunctions.route("inventory-service-swagger-ui")
+                .route(RequestPredicates.path("/aggregate/inventory-service/v3/api-docs"),
+                        HandlerFunctions.http("http://localhost:8082"))
+                .filter(setPath("/v3/api-docs"))
                 .build();
     }
 
