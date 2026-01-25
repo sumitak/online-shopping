@@ -30,6 +30,11 @@ public class ProductContoller {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<ProductResponse> getAllProducts() {
+       /* try{
+            Thread.sleep(5000);
+        }catch(InterruptedException e){
+           throw new RuntimeException(e);
+        }*/
         // Implementation will go here
       return productService.getAllProducts();
     }

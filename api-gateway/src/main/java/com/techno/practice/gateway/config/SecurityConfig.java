@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.server.SecurityWebFilterChain;
+
 
 @Configuration
 public class SecurityConfig  {
@@ -15,9 +15,10 @@ public class SecurityConfig  {
             "/swagger-ui.html",
             "/v3/api-docs/**",
             "/swagger-ui/**",
-            "swagger-resources/**",
-            "api-docs/**",
-            "aggregate/**"
+            "/swagger-resources/**",
+            "/api-docs/**",
+            "aggregate/**",
+            "/actuator/**"
     };
 
     @Bean
@@ -31,7 +32,5 @@ public class SecurityConfig  {
                         oauth2.jwt(Customizer.withDefaults())
 
                 ).build();
-
-
     }
 }

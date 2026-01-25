@@ -12,6 +12,8 @@ import org.springframework.web.servlet.function.RequestPredicates;
 import org.springframework.web.servlet.function.RouterFunction;
 import org.springframework.web.servlet.function.ServerResponse;
 
+import java.net.URI;
+
 import static org.springframework.cloud.gateway.server.mvc.filter.FilterFunctions.setPath;
 import static org.springframework.web.servlet.function.RouterFunctions.route;
 
@@ -21,9 +23,12 @@ public class Routes {
 
     @Bean
     public RouterFunction<ServerResponse> productServiceRoute() {
+        System.out.println("****Product Service Route Bean Created***");
         return GatewayRouterFunctions.route("product-service")
                 .route(RequestPredicates.path("/api/product"),
                         HandlerFunctions.http("http://localhost:8080"))
+                .filter(CircuitBreakerFilterFunctions.circuitBreaker("productServiceCircuitBreaker",
+                        URI.create("forward:/fallbackRoute")))
                 .build();
     }
 
@@ -32,6 +37,8 @@ public class Routes {
         return GatewayRouterFunctions.route("product-service-swagger-ui")
                 .route(RequestPredicates.path("/aggregate/product-service/v3/api-docs"),
                         HandlerFunctions.http("http://localhost:8080"))
+                .filter(CircuitBreakerFilterFunctions.circuitBreaker("productServiceSwaggerCircuitBreaker",
+                        URI.create("forward:/fallbackRoute")))
                 .filter(setPath("/v3/api-docs"))
                 .build();
     }
@@ -41,6 +48,8 @@ public class Routes {
         return GatewayRouterFunctions.route("order-service")
                 .route(RequestPredicates.path("/api/orders"),
                         HandlerFunctions.http("http://localhost:8081"))
+                .filter(CircuitBreakerFilterFunctions.circuitBreaker("orderServiceCircuitBreaker",
+                        URI.create("forward:/fallbackRoute")))
                 .build();
     }
 
@@ -49,6 +58,8 @@ public class Routes {
         return GatewayRouterFunctions.route("order-service-swagger-ui")
                 .route(RequestPredicates.path("/aggregate/order-service/v3/api-docs"),
                         HandlerFunctions.http("http://localhost:8081"))
+                .filter(CircuitBreakerFilterFunctions.circuitBreaker("orderServiceSwaggerCircuitBreaker",
+                        URI.create("forward:/fallbackRoute")))
                 .filter(setPath("/v3/api-docs"))
                 .build();
     }
@@ -58,6 +69,9 @@ public class Routes {
         return GatewayRouterFunctions.route("inventory-service")
                 .route(RequestPredicates.path("/api/inventory/isInStock"),
                         HandlerFunctions.http("http://localhost:8082"))
+                .filter(CircuitBreakerFilterFunctions.circuitBreaker("inventoryServiceCircuitBreaker",
+                        URI.create("forward:/fallbackRoute")))
+
                 .build();
     }
 
@@ -66,8 +80,20 @@ public class Routes {
         return GatewayRouterFunctions.route("inventory-service-swagger-ui")
                 .route(RequestPredicates.path("/aggregate/inventory-service/v3/api-docs"),
                         HandlerFunctions.http("http://localhost:8082"))
+                .filter(CircuitBreakerFilterFunctions.circuitBreaker("inventoryServiceSwaggerCircuitBreaker",
+                        URI.create("forward:/fallbackRoute")))
                 .filter(setPath("/v3/api-docs"))
                 .build();
     }
+
+  /*  @Bean
+    public RouterFunction<ServerResponse> fallbackRoute() {
+        System.out.println("****Fallback route triggered***");
+        return route()
+                .GET("/fallbackRoute", request ->
+                        ServerResponse.status(HttpStatus.SERVICE_UNAVAILABLE)
+                                .body("Service is currently unavailable. Please try again later."))
+                .build();
+    }*/
 
 }
