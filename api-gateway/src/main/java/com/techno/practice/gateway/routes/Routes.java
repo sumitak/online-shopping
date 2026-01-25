@@ -12,6 +12,7 @@ import org.springframework.web.servlet.function.RequestPredicates;
 import org.springframework.web.servlet.function.RouterFunction;
 import org.springframework.web.servlet.function.ServerResponse;
 
+import static org.springframework.cloud.gateway.server.mvc.filter.FilterFunctions.setPath;
 import static org.springframework.web.servlet.function.RouterFunctions.route;
 
 
@@ -23,6 +24,15 @@ public class Routes {
         return GatewayRouterFunctions.route("product-service")
                 .route(RequestPredicates.path("/api/product"),
                         HandlerFunctions.http("http://localhost:8080"))
+                .build();
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> productServiceSwaggerRoute() {
+        return GatewayRouterFunctions.route("product-service-swagger-ui")
+                .route(RequestPredicates.path("/aggregate/product-service/v3/api-docs"),
+                        HandlerFunctions.http("http://localhost:8080"))
+                .filter(setPath("/v3/api-docs"))
                 .build();
     }
 

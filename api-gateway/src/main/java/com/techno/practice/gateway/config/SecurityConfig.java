@@ -11,12 +11,22 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 @Configuration
 public class SecurityConfig  {
 
+    private final String[] AUTH_WHITELIST = {
+            "/swagger-ui.html",
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "swagger-resources/**",
+            "api-docs/**",
+            "aggregate/**"
+    };
+
     @Bean
     public SecurityFilterChain securityWebFilterChain(HttpSecurity http) throws Exception {
 
         return  http.authorizeHttpRequests(authorize ->
 
-                        authorize.anyRequest().authenticated())
+                        authorize.requestMatchers(AUTH_WHITELIST).permitAll()
+                                .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 ->
                         oauth2.jwt(Customizer.withDefaults())
 
