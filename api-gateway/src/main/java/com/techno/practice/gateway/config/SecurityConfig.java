@@ -2,40 +2,26 @@ package com.techno.practice.gateway.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
-import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
 @Configuration
-@EnableWebFluxSecurity
 public class SecurityConfig  {
 
     @Bean
-    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
+    public SecurityFilterChain securityWebFilterChain(HttpSecurity http) throws Exception {
 
-        http
-                .csrf(ServerHttpSecurity.CsrfSpec::disable)
-                .authorizeExchange(exchanges -> exchanges
-                        .pathMatchers("/actuator/**").permitAll()
-                        .pathMatchers("/admin/**").hasRole("ADMIN")
-                        .pathMatchers("/users/**").hasAnyRole("USER", "ADMIN")
-                        .pathMatchers(
-                                "/swagger-ui.html",
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**",
-                                "/swagger-resources/**",
-                               "/api-docs/**",
-                                "/aggregate/**"
+        return  http.authorizeHttpRequests(authorize ->
 
-                        ).permitAll()
-                        .anyExchange().authenticated()
-                )
+                        authorize.anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 ->
                         oauth2.jwt(Customizer.withDefaults())
 
-                );
+                ).build();
 
-        return http.build();
+
     }
 }
