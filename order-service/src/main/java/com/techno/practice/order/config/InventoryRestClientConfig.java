@@ -4,6 +4,7 @@ import com.techno.practice.order.client.InventoryClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.support.RestClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
@@ -23,10 +24,17 @@ public class InventoryRestClientConfig {
     public InventoryClient invemtoryClient() {
         RestClient restClient = RestClient.builder()
                 .baseUrl(inventoryServiceUrl)
+              // .requestFactory(getClinetRequestFactory())
                 .build();
         var restClientAdapter = RestClientAdapter.create(restClient);
         var httpserviceProxyFactory = HttpServiceProxyFactory.builderFor(restClientAdapter).build();
         return httpserviceProxyFactory.createClient(InventoryClient.class);
     }
+
+    /*private ClientHttpRequestFactory getClinetRequestFactory() {
+        // You can customize the ClientHttpRequestFactory here if needed
+        ClientHttpRequestFactorySettings factory = new org.springframework.http.client.SimpleClientHttpRequestFactory();
+        return null;
+    }*/
 
 }
