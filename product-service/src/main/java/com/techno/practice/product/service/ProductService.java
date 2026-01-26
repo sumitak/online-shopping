@@ -4,8 +4,10 @@ import com.techno.practice.product.dto.ProductRequest;
 import com.techno.practice.product.dto.ProductResponse;
 import com.techno.practice.product.model.Product;
 import com.techno.practice.product.repo.ProductRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,21 +31,26 @@ import java.util.List;
  * is a convenient way to create service classes in Spring that are properly wired
  * with their dependencies while keeping the code concise and maintainable.
  */
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@Slf4j
+
 public class ProductService {
 
-   // @Autowired
+    Logger log = LoggerFactory.getLogger(ProductService.class);
+
+    @Autowired
     private final ProductRepository productRepository;
 
-public ProductResponse createProduct(ProductRequest productRequest) {
-        var product = Product.builder()
-                .name(productRequest.name())
-                .description(productRequest.description())
-                .price(productRequest.price())
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
+
+    public ProductResponse createProduct(ProductRequest productRequest) {
+        var product = new Product.Builder()
+                .setName(productRequest.name())
+                .setDescription(productRequest.description())
+                .setPrice(productRequest.price())
                 .build();
         productRepository.save(product);
-        log.info("Product {} created successfully", product);
+        log.info("Product created successfully");
     return new ProductResponse(product.getId(),
             product.getName(),
             product.getDescription(),
