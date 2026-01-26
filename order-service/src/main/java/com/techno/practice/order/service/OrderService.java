@@ -4,18 +4,26 @@ import com.techno.practice.order.client.InventoryClient;
 import com.techno.practice.order.dto.OrderRequest;
 import com.techno.practice.order.model.Order;
 import com.techno.practice.order.repo.OrderRepository;
-import lombok.RequiredArgsConstructor;
+//import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 
 @Service
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class OrderService {
-
+    @Autowired
     private final OrderRepository orderRepository;
+
+    @Autowired
     private final InventoryClient inventoryyClient;
+
+    public OrderService(OrderRepository orderRepository, InventoryClient inventoryyClient) {
+        this.orderRepository = orderRepository;
+        this.inventoryyClient = inventoryyClient;
+    }
 
 
     public void placeOrder(OrderRequest orderRequest) {

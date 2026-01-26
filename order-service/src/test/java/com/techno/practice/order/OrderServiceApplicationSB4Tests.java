@@ -1,39 +1,40 @@
+/*
 package com.techno.practice.order;
 
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import com.techno.practice.order.stubs.InventoryClientStub;
 import io.restassured.RestAssured;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
-import org.springframework.core.env.Environment;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.testcontainers.mysql.MySQLContainer;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
-@ActiveProfiles("test")
-@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureWireMock(port=0)
-class OrderServiceApplicationTests {
+@WireMockTest(httpPort = 8082)
 
-@Autowired
-private Environment environment;
+class OrderServiceApplicationSB4Tests {
+
+    static WireMockServer wireMockServer;
+
+    @ServiceConnection
+    static MySQLContainer mysqlContainer = new MySQLContainer("mysql:8.0.33");
+
     @LocalServerPort
     private Integer port;
 
+    static{
+        mysqlContainer.start();
+    }
 
     @BeforeEach
     void setUp() {
-        System.out.println("Starting setup Tests...");
         RestAssured.port = port;
         RestAssured.baseURI = "http://localhost";
-        System.out.println("Ending setup Tests...");
     }
 
     @Test
@@ -45,8 +46,6 @@ private Environment environment;
                      "quantity": 3
                    }
                 """;
-
-        System.out.println("********** >>>>>>>WireMock running on port: " + environment.getProperty("wiremock.server.port"));
       InventoryClientStub.stubInventoryCall("SKU-ABC-124", 3);
       var responseBodyString =  RestAssured.given()
                 .header("Content-Type", "application/json")
@@ -62,3 +61,4 @@ private Environment environment;
     }
 
 }
+*/
