@@ -1,16 +1,19 @@
 package com.techno.practice.inventory_service.controller;
 
 import com.techno.practice.inventory_service.service.InventoryService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/inventory")
-@RequiredArgsConstructor
 public class InventoryController {
-
+    @Autowired
     private final InventoryService inventoryService;
+
+    public InventoryController(InventoryService inventoryService) {
+        this.inventoryService = inventoryService;
+    }
 
     @GetMapping("/isInStock")
     @ResponseStatus(HttpStatus.OK)
