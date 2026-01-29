@@ -1,4 +1,5 @@
-package com.techno.practice.notification_service;
+/*
+package com.techno.practice.notification;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
@@ -16,3 +17,4 @@ class TestcontainersConfiguration {
 	}
 
 }
+*/

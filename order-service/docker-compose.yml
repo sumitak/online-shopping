@@ -17,5 +17,41 @@ services:
       - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
     command: --default-authentication-plugin=mysql_native_password
 
+  kafka-online-shopping:
+    image: confluentinc/cp-kafka:7.6.0
+    container_name: kafka-online-shopping
+    ports:
+      - "9098:9098"
+    environment:
+      KAFKA_NODE_ID: 1
+      CLUSTER_ID: "9n_FfxJ1Q4KvfoLUCYU-kA"
+      KAFKA_PROCESS_ROLES: "broker,controller"
+
+      # Listeners
+      KAFKA_LISTENERS: "INTERNAL://0.0.0.0:19098,EXTERNAL://0.0.0.0:9098,CONTROLLER://0.0.0.0:29093"
+      KAFKA_ADVERTISED_LISTENERS: "INTERNAL://kafka-online-shopping:19098,EXTERNAL://localhost:9098"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT"
+      KAFKA_INTER_BROKER_LISTENER_NAME: "INTERNAL"
+      KAFKA_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+
+      # Quorum voters
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka-online-shopping:29093"
+
+      # Replication configs
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+
+    ports:
+      - "8086:8080" #<localhost_port>:<container_port>
+    depends_on:
+      - kafka-online-shopping
+    environment:
+      KAFKA_CLUSTERS_0_NAME: kraft-cluster
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS:  kafka-online-shopping:19098
+
+
 volumes:
   order_mysql_data:

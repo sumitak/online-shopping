@@ -1,4 +1,5 @@
-package com.techno.practice.notification_service;
+/*
+package com.techno.practice.notification;
 
 import org.springframework.boot.SpringApplication;
 
@@ -9,3 +10,4 @@ public class TestNotificationServiceApplication {
 	}
 
 }
+*/

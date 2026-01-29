@@ -1,4 +1,4 @@
-package com.techno.practice.notification_service;
+package com.techno.practice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

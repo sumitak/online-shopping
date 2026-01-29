@@ -6,5 +6,14 @@ public record OrderRequest( Long id,
          String orderNumber,
          String skuCode,
          BigDecimal price,
-         Integer quantity ) {
+         Integer quantity,
+                            UserDetails userDetails) {
+    public record UserDetails(
+            String firstName,
+            String lastName,
+            String email,
+            String address,
+            String phoneNumber
+    ) {
+    }
 }
