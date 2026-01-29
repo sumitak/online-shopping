@@ -49,10 +49,11 @@ if(isProductInStock) {
 
     orderRepository.save(order);
     // send the message to kafka topic
-    OrderPlacedEvent orderPlacedEvent = new OrderPlacedEvent(
-            order.getOrderNumber(),
-            orderRequest.userDetails().email()
-    );
+    OrderPlacedEvent orderPlacedEvent = new OrderPlacedEvent();
+    orderPlacedEvent.setOrderNumber(order.getOrderNumber());
+    orderPlacedEvent.setEmail(orderRequest.userDetails().email());
+    orderPlacedEvent.setFirstName(orderRequest.userDetails().firstName());
+    orderPlacedEvent.setLastName(orderRequest.userDetails().lastName());
     logger.info("Order placed event sent to Kafka for order number: {}" , order.getOrderNumber());
     kafkaTemplate.send("order-placed", orderPlacedEvent);
     logger.info("Order placed successfully with order number: {}" ,order.getOrderNumber());

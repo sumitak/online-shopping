@@ -40,6 +40,19 @@ services:
       # Replication configs
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
+  schema-registry:
+    image: confluentinc/cp-schema-registry:7.6.1
+    hostname: schema-registry
+    container_name: schema-registry
+    depends_on:
+      - kafka-online-shopping
+    ports:
+      - "8085:8081"
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafka-online-shopping:19098
+
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     container_name: kafka-ui
@@ -48,6 +61,7 @@ services:
       - "8086:8080" #<localhost_port>:<container_port>
     depends_on:
       - kafka-online-shopping
+      - schema-registry
     environment:
       KAFKA_CLUSTERS_0_NAME: kraft-cluster
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS:  kafka-online-shopping:19098

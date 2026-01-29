@@ -31,7 +31,15 @@ public class NotificationService {
             messageHelper.setFrom("newshopping@gmail.com");
             messageHelper.setTo(orderPlacedEvent.getEmail());
             messageHelper.setSubject("Order Placed Successfully - " + orderPlacedEvent.getOrderNumber());
-            messageHelper.setText("Your order with order number " + orderPlacedEvent.getOrderNumber() + " has been placed successfully.");
+            messageHelper.setText(String.format("""
+                    Dear %s %s,
+                    
+                    Your order with order number %s has been placed successfully.
+                    Thank you for shopping with us!
+                    """,
+                    orderPlacedEvent.getFirstName(),
+                    orderPlacedEvent.getLastName(),
+                    orderPlacedEvent.getOrderNumber()));
         };
         try {
             javaMailSender.send(messagePreparator);

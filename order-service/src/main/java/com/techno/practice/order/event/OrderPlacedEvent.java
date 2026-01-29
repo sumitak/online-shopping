@@ -1,9 +1,12 @@
+/*
 package com.techno.practice.order.event;
 
 public class OrderPlacedEvent {
 
     private String orderNumber;
-    private String email;
+    private String email;*/
+/**//*
+
 
     public OrderPlacedEvent() {
     }
@@ -29,3 +32,4 @@ public class OrderPlacedEvent {
         this.email = email;
     }
 }
+*/
